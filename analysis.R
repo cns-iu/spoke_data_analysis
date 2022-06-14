@@ -1,17 +1,13 @@
 source("preprocessing.r")
 
-# analyze duration
+# set global vars
 
-ggplot(pilot, aes(x = ResponseId,y = Duration, fill = pilot$Q2.5_6))+
-  geom_bar(stat = "identity")
-
+total_num_tasks = 8
 
 # evaluate answers
-
 # assign scores based on answer key
 
-# multiple-choice (single-answer)
-
+# single answer
 # pilot$Q6.2
 # pilot$Q6.6
 
@@ -20,8 +16,7 @@ pilot = pilot %>% mutate(
  Q6.6_score = (as.character(answer_key[2,2]) == as.character(pilot$Q6.6))
 )
 
-# multiple-choice (multiple answers)
-# 
+# multiple answers
 # pilot$Q6.10_1
 # pilot$Q6.10_2
 # pilot$Q6.10_3
@@ -67,12 +62,41 @@ pilot = pilot %>% mutate(
 )
 
 pilot = pilot %>% rowwise() %>% mutate(
-  total_score = sum(c_across(Q6.2_score:Q6.30_score))
+  total_score_abs = sum(c_across(Q6.2_score:Q6.30_score)),
+  total_score_norm = total_score_abs/total_num_tasks
   )
 
-pilot$total_score %>% hist()
+pilot$total_score_abs
+pilot$total_score_abs %>% summary()
+pilot$total_score_abs %>% hist()
 
-# time
+
+pilot %>% select(contains("score")) %>% view()
+
+
+
+
+
+# analyze duration
+
+ggplot(pilot, aes(x = ResponseId, y = Duration/60, fill=total_score_norm))+
+  geom_bar(stat = "identity") +
+  geom_hline(yintercept = median(pilot$Duration/60, linetype="fsdf"), color="red")+
+  labs(x = "Subject ID", y="Duration [minutes]", fill ="Total score (normalized)")+
+  theme(
+    legend.position = c(.95, .95),
+    legend.justification = c("right", "top"),
+    legend.box.just = "right",
+    legend.margin = margin(6, 6, 6, 6)
+  )
+
+
+ggplot(pilot,aes(x=ResponseId,y=total_score))+
+  geom_bar(stat="identity")
+
+
+
+# synchronize qualtrics and big google cloud data
 raw$Q6.31
 as_datetime(raw$Q6.28/1000, tz = "EST")
 
@@ -80,10 +104,3 @@ study = read_csv("data/SPOKE_prestudy_data/bq-results-20220405-154941-1649178520
 as_datetime(study$user_first_touch_timestamp/1000/1000, tz = "EST")[1]
 as_datetime(study$event_timestamp/1000/1000, tz = "EST") %>% unique() %>% sort()
 study$event_timestamp/1000000 %>% unique() %>% sort()
-
-
-
-as.character(study$user_pseudo_id) ==  "1179371801.1647741692"
-
-
-study %>% view()

@@ -40,6 +40,9 @@ renamed
 pilot = renamed %>% 
   filter( 
     !is.na(Q5.5)
+  ) %>% 
+  filter(
+    Progress == 100
   )
 pilot
 
