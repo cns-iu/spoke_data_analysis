@@ -3,6 +3,7 @@ library(dplyr)
 library(qualtRics)
 library(lubridate)
 library(ggstatsplot)
+library(rjson)
 
 source("qualtrics_auth.R")
 
@@ -13,7 +14,6 @@ raw <- fetch_survey(surveyID = survey_id,
                          verbose = TRUE, 
                          save_dir = "data", 
                          force_request = TRUE)
-raw %>% view()
 
 # load answer key
 

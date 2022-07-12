@@ -4,6 +4,25 @@ source("preprocessing.r")
 
 total_num_tasks = 8
 
+
+# RQ1
+
+# Load interaction data
+
+# get overview of times and scores for all pilot user
+pilot %>% select(ResponseId, RecordedDate,total_score_norm, Duration)
+
+# investigate timingstimeline for qualtrics-> google cloud
+
+
+
+
+google = read_csv("data/SPOKE_prestudy_data/R_1rp0VM9Y2HLSSWk.csv")
+google$event_params
+
+
+# RQ2
+
 # evaluate answers
 # assign scores based on answer key
 
@@ -70,12 +89,7 @@ pilot$total_score_abs
 pilot$total_score_abs %>% summary()
 pilot$total_score_abs %>% hist()
 
-
-pilot %>% select(contains("score")) %>% view()
-
-
-
-
+# general descriptive stats
 
 # analyze duration
 
@@ -91,7 +105,7 @@ ggplot(pilot, aes(x = ResponseId, y = Duration/60, fill=total_score_norm))+
   )
 
 
-ggplot(pilot,aes(x=ResponseId,y=total_score))+
+ggplot(pilot,aes(x=ResponseId,y=total_score_norm))+
   geom_bar(stat="identity")
 
 
