@@ -114,7 +114,8 @@ ggplot(pilot,aes(x=ResponseId,y=total_score_norm))+
 raw$Q6.31
 as_datetime(raw$Q6.28/1000, tz = "EST")
 
-study = read_csv("data/SPOKE_prestudy_data/bq-results-20220405-154941-1649178520922.csv")
+study = read_csv("data/SPOKE_prestudy_data/old/bq-results-20220405-154941-1649178520922.csv")
 as_datetime(study$user_first_touch_timestamp/1000/1000, tz = "EST")[1]
 as_datetime(study$event_timestamp/1000/1000, tz = "EST") %>% unique() %>% sort()
 study$event_timestamp/1000000 %>% unique() %>% sort()
+

@@ -2,7 +2,6 @@ library(tidyverse)
 library(dplyr)
 library(qualtRics)
 library(lubridate)
-library(ggstatsplot)
 library(rjson)
 
 source("qualtrics_auth.R")
