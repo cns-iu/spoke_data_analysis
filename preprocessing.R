@@ -2,9 +2,9 @@ library(tidyverse)
 library(dplyr)
 library(qualtRics)
 library(lubridate)
-library(ggstatsplot)
+library(rjson)
 
-source("qualtrics_auth.R")
+# source("qualtrics_auth.R")
 
 # loading the survey data
 survey_id = 'SV_6sMimcMUAjk8BEO'
@@ -13,7 +13,6 @@ raw <- fetch_survey(surveyID = survey_id,
                          verbose = TRUE, 
                          save_dir = "data", 
                          force_request = TRUE)
-raw %>% view()
 
 # load answer key
 
@@ -40,6 +39,9 @@ renamed
 pilot = renamed %>% 
   filter( 
     !is.na(Q5.5)
+  ) %>% 
+  filter(
+    Progress == 100
   )
 pilot
 
