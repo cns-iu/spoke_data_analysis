@@ -4,7 +4,7 @@ library(qualtRics)
 library(lubridate)
 library(rjson)
 
-source("qualtrics_auth.R")
+# source("qualtrics_auth.R")
 
 # loading the survey data
 survey_id = 'SV_6sMimcMUAjk8BEO'

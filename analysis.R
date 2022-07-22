@@ -7,18 +7,47 @@ total_num_tasks = 8
 # RQ1
 
 # Load interaction data
+study_raw = read_csv("data/SPOKE_prestudy_data/all_events.csv")
 
-# get overview of times and scores for all pilot user
-pilot %>% select(ResponseId, RecordedDate,total_score_norm, Duration)
+# get mapping qualtrics -> google user name
+study_raw$user_pseudo_id = as.character(study_raw$user_pseudo_id)
+user_mapping = study_raw %>% 
+  select(user_pseudo_id,page_location) %>% 
+  unique() %>% 
+  filter(grepl('R_', page_location))
 
-# investigate timingstimeline for qualtrics-> google cloud
-google = read_csv("data/SPOKE_prestudy_data/R_1rp0VM9Y2HLSSWk.csv")
-google$event_params
+user_mapping
+
+# create summary of events for pilot users
+s = study_raw %>% group_by(user_pseudo_id, event_name, event_category) %>% tally()
+s
+
+s = s %>% filter(
+  user_pseudo_id %in% user_mapping$user_pseudo_id
+)
+
+s %>% view()
+
+write_csv(s,"data/output/events.csv")
+
+# add column with qualtrics response id
+
+
+
+
+
+
+# matches <- unique (grep(paste(to_match,collapse="|"), 
+#                         study_raw, value=TRUE))
+# 
+# study_raw %>% group_by(user_pseudo_id, event_category) %>% tally()
+
 
 
 # RQ2
 # evaluate answers
 # assign scores based on answer key
+
 
 # single answer
 # pilot$Q6.2
@@ -81,6 +110,9 @@ pilot$total_score_abs %>% hist()
 
 # general descriptive stats
 
+# get overview of times and scores for all pilot user
+pilot %>% select(ResponseId, RecordedDate,total_score_norm, Duration)
+
 # analyze durations
 ggplot(pilot, aes(x = ResponseId, y = Duration/60, fill=total_score_norm))+
   geom_bar(stat = "identity") +
@@ -100,7 +132,6 @@ cor.test(pilot$Duration, pilot$total_score_norm)
 
 
 # calculate times between for exploration
-
 pilot$`Q5.1_First Click`
 pilot$`Q5.1_Last Click`
 pilot$`Q5.1_Click Count`
@@ -115,24 +146,31 @@ pilot$`Q5.1_Page Submit` %>% mean()/60
 # time spent on documentation part in Qualtrics
 pilot$`Q5.1_Page Submit` %>% summary()/60
 
-# load google data
-# as_datetime(raw$Q6.28/1000, tz = "EST")
-# as_datetime(study$user_first_touch_timestamp/1000/1000, tz = "EST")[1]
-# as_datetime(study$event_timestamp/1000/1000, tz = "EST") %>% unique() %>% sort()
-# study$event_timestamp/1000000 %>% unique() %>% sort()
 
-study = read_csv("data/SPOKE_prestudy_data/all_events.csv")
 
-# check if subjects R_3nwax0EqOYAGxo4 and R_2rAyEiPIZPyxG4Y were recorded on Google but without responseId
 
-# analyze if we can make sense of google data for two subjects
-# filter data for only subjects R_3xYcNPgDwiQAC2d and R_3s1ANePRmPSafL2
 
-g_check = study %>% filter(
-  grepl('R_3s1ANePRmPSafL2', page_location, fixed = TRUE)
-)
-g_check
 
-# replace user pseudo id with response id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
